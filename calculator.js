@@ -123,6 +123,9 @@ buttons.map(button => {
                             if (result.endsWith('.0')) {
                                 result = Math.round(result);
                             }
+                            else {
+                                result = parseFloat(result).toFixed(6);
+                            }
                             display.innerText = result.toString();
                             block = true;
                             break;
@@ -148,6 +151,9 @@ buttons.map(button => {
                                 if (result.endsWith('.0')) {
                                     result = Math.round(result);
                                 }
+                                else {
+                                    result = parseFloat(result).toFixed(6);
+                                }
                                 display.innerText = result.toString();
                                 block = true;
                             }
@@ -171,6 +177,9 @@ function numberTooBig () {
     if (result < max_number) {
         if (result.endsWith('.0')) {
             result = Math.round(result);
+        }
+        else {
+            result = parseFloat(result).toFixed(6);
         }
         display.innerText = result.toString();
         block = true;

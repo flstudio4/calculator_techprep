@@ -17,7 +17,7 @@ let minusTyped = false;
 let block = false;
 let sign = "";
 let error = false;
-let max_length = 15;
+
 let max_number = 999999999999999;
 let display = document.getElementById('display');
 
@@ -25,122 +25,134 @@ let buttons = Array.from(document.getElementsByClassName('button'));
 
 buttons.map(button => {
     button.addEventListener('click', (e) => {
+
+        let max_length = 15;
         let my_length = display.innerText.length;
-        let met_condition = (display.innerText[0] !== '0' || display.innerText.startsWith('0.')) && !block && my_length < max_length;
+        let metConditionForNumbers = my_length < max_length && (display.innerText[0] !== '0' || display.innerText.startsWith('0.') && !error && !block);
+        let metConditionsForSigns = !error && !block && display.innerText !== '-' && display.innerText !== '-0' && display.innerText !== '-0.' && display.innerText !== '0.' && display.innerText !== '0';
+        let metConditionsForDot = my_length < max_length && display.innerText !== '' && !dotTyped && !error && !block && display.innerText !== '-';
+        let metConditionForZero = my_length < max_length && (display.innerText[0] !== '0' && !display.innerText.startsWith('-0') || display.innerText.startsWith('0.') || display.innerText.startsWith('-0.') && !error && !block);
 
         switch (e.target.innerText) {
             case '.':
-                if (display.innerText !== '' && !dotTyped && my_length < max_length && !error) {
+                if (metConditionsForDot) {
                     display.innerText += '.';
                     dotTyped = true;
                 }
                 break
             case '0':
-                if (met_condition) {
+                if (metConditionForZero) {
                     display.innerText += '0';
                     zeroTyped = true;
                 }
                 break;
             case '1':
-                if (met_condition) {
-                    display.innerText += 1;
-                }
-                break;
             case '2':
-                if (met_condition) {
-                    display.innerText += 2;
-                }
-                break;
             case '3':
-                if (met_condition) {
-                    display.innerText += 3;
-                }
-                break;
             case '4':
-                if (met_condition) {
-                    display.innerText += 4;
-                }
-                break;
             case '5':
-                if (met_condition) {
-                    display.innerText += 5;
-                }
-                break;
             case '6':
-                if (met_condition) {
-                    display.innerText += 6;
-                }
-                break;
             case '7':
-                if (met_condition) {
-                    display.innerText += 7;
-                }
-                break;
             case '8':
-                if (met_condition) {
-                    display.innerText += 8;
-                }
-                break;
             case '9':
-                if (met_condition) {
-                    display.innerText += 9;
+                if (metConditionForNumbers) {
+                    display.innerText += e.target.innerText;
                 }
                 break;
             case 'C':
-                clear();
+                zeroTyped = false;
+                dotTyped = false;
+                minusTyped = false;
+                block = false;
+                error = false;
+                display.innerText = '';
                 break;
             case '-':
-                subtraction();
+                if (display.innerText === "" && !minusTyped && !error && !block) {
+                    display.innerText += '-';
+                    minusTyped = true;
+                } else if(metConditionsForSigns) {
+                    sign = '-';
+                    value1 = parseFloat(display.innerText);
+                    display.innerText = "";
+                    minusTyped = false;
+                    dotTyped = false;
+                    zeroTyped = false;
+                    block = false;
+                }
                 break;
             case '+':
-                addition();
+                if (metConditionsForSigns) {
+                    sign = '+';
+                    value1 = parseFloat(display.innerText);
+                    display.innerText = "";
+                    minusTyped = false;
+                    dotTyped = false;
+                    zeroTyped = false;
+                    block = false;
+                }
                 break;
             case '/':
-                division();
+                if (metConditionsForSigns) {
+                    sign = '/';
+                    value1 = parseFloat(display.innerText);
+                    display.innerText = "";
+                    minusTyped = false;
+                    dotTyped = false;
+                    zeroTyped = false;
+                    block = false;
+                }
                 break;
             case '*':
-                multiplication();
+                if (metConditionsForSigns) {
+                    sign = '*';
+                    value1 = parseFloat(display.innerText);
+                    display.innerText = "";
+                    minusTyped = false;
+                    dotTyped = false;
+                    zeroTyped = false;
+                    block = false;
+                }
                 break;
             case '=':
-                if (!block && !error && result.toString() !== 'NaN' && result.toString() !== "Infinity" && result.toString() !== "-Infinity") {
-                    permission();
-
-                    if (sign === '-') {
-                        value2 = parseFloat(display.innerText);
-                        result = (value1 - value2).toFixed(4);
-                        display.innerText = result.toString();
-
-                    } else if (sign === '+') {
-                        value2 = parseFloat(display.innerText);
-                        result = (value1 + value2).toFixed(4);
-
-                        if (result < max_number) {
-                            display.innerText = result.toString();
-                        } else {
-                            display.innerText = 'number is too big';
-                            error = true;
-                        }
-                    } else if (sign === '*') {
-                        value2 = parseFloat(display.innerText);
-                        result = (value1 * value2).toFixed(4);
-                        if (result < max_number) {
-                            display.innerText = result.toString();
-                        } else {
-                            display.innerText = 'number is too big';
-                            error = true;
-                        }
-
-                    } else if (sign === '/') {
-                        value2 = parseFloat(display.innerText);
-                        if (value2 === 0) {
-                            display.innerText = "error";
-                            error = true;
-                            block = true;
-                        } else {
+                if (!block && !error) {
+                    switch (sign) {
+                        case '-':
                             value2 = parseFloat(display.innerText);
-                            result = (value1 / value2).toFixed(4);
+                            result = (value1 - value2).toString();
+                            if (result.endsWith('.0')) {
+                                result = Math.round(result);
+                            }
                             display.innerText = result.toString();
-                        }
+                            block = true;
+                            break;
+                        case '+':
+                            value2 = parseFloat(display.innerText);
+                            result = (value1 + value2).toString();
+                            numberTooBig();
+                            break;
+                        case '*':
+                            value2 = parseFloat(display.innerText);
+                            result = (value1 * value2).toString();
+                            numberTooBig();
+                            break;
+                        case '/':
+                            value2 = parseFloat(display.innerText);
+                            if (value2 === 0) {
+                                display.innerText = "error";
+                                error = true;
+                                block = true;
+                            } else {
+                                value2 = parseFloat(display.innerText);
+                                result = (value1 / value2).toString();
+                                if (result.endsWith('.0')) {
+                                    result = Math.round(result);
+                                }
+                                display.innerText = result.toString();
+                                block = true;
+                            }
+                            break;
+                        default: console.log('some error has occurred');
                     }
                 }
                 break;
@@ -155,57 +167,16 @@ buttons.map(button => {
     });
 });
 
-function permission() {
-    minusTyped = false;
-    dotTyped = false;
-    zeroTyped = false;
-    block = false;
-}
-
-function clear() {
-    zeroTyped = false;
-    dotTyped = false;
-    minusTyped = false;
-    block = false;
-    error = false;
-    display.innerText = '';
-}
-
-function multiplication() {
-    if (!error) {
-        sign = '*';
-        value1 = parseFloat(display.innerText);
-        display.innerText = "";
-        permission();
-    }
-}
-
-function division() {
-    if (!error) {
-        sign = '/';
-        value1 = parseFloat(display.innerText);
-        display.innerText = "";
-        permission();
-    }
-}
-
-function addition() {
-    if (!error) {
-        sign = '+';
-        value1 = parseFloat(display.innerText);
-        display.innerText = "";
-        permission();
-    }
-}
-
-function subtraction() {
-    if (display.innerText === "" && !minusTyped && !error) {
-        display.innerText += '-';
-        minusTyped = true;
-    } else if (!error) {
-        sign = '-';
-        value1 = parseFloat(display.innerText);
-        display.innerText = "";
-        permission();
+function numberTooBig () {
+    if (result < max_number) {
+        if (result.endsWith('.0')) {
+            result = Math.round(result);
+        }
+        display.innerText = result.toString();
+        block = true;
+    } else {
+        display.innerText = 'number is too big';
+        error = true;
+        block = true;
     }
 }

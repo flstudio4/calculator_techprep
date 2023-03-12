@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+/*
+
+    Simple Calculator app
+    Author: Dmitrii Sumenko
+    Date: 03/11/2023
+    FileName: index.css
+
+*/
+
+    html {
+        width: 100%;
+        background-color: dimgray;
+    }
+
+    header {
+        font-size: 3em;
+        text-align: center;
+        margin: 40px auto 40px auto;
+        font-family: Calibri, serif;
+        font-weight: bolder;
+        color: cornflowerblue;
+        text-shadow: green 5px 5px 10px, red -5px -5px 10px, black 1px 1px;
+        cursor: default;
+    }
+
+    a:hover {
+        color: yellowgreen;
+    }
+
+    a {
+        text-decoration: none;
+        color: cornflowerblue;
+    }
+
+    footer {
+        margin-top: 100px;
+        text-align: center;
+        font-size: 1.2em;
+        color: cornflowerblue;
+        text-shadow: turquoise 5px 5px 10px, red -5px -5px 10px, black 1px 1px;
+    }
+
+    .container {
+        max-width: 350px;
+        margin: 0 auto 0 auto;
+        box-shadow: 0 0 43px 17px rgba(153,153,153,1);
+    }
+
+    #display {
+        text-align: right;
+        height: 40px;
+        line-height: 70px;
+        padding: 18px 8px;
+        font-size: 35px;
+        margin-bottom: 4px;
+        font-family: Consolas, Arial, serif;
+        color: lawngreen;
+    }
+
+    .buttons {
+        display: grid;
+        border-bottom: 2px solid #999;
+        border-left: 2px solid#999;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        padding: 2px 2px 2px 2px;
+    }
+
+    .buttons > div {
+        border-top: 2px solid #999;
+        border-right: 1px solid#999;
+        text-emphasis: none;
+    }
+
+    .button {
+        border: 1px solid #999;
+        line-height: 70px;
+        text-align: center;
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    #equal {
+        background-color: rgb(85, 85, 255);
+        color: white;
+    }
+
+    .button:hover {
+        background-color: yellowgreen;
+        color: white;
+    }

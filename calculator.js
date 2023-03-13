@@ -28,10 +28,10 @@ buttons.map(button => {
 
         let max_length = 15;
         let my_length = display.innerText.length;
-        let metConditionForNumbers = my_length < max_length && (display.innerText[0] !== '0' || display.innerText.startsWith('0.') && !error && !block);
-        let metConditionsForSigns = !error && !block && display.innerText !== '-' && display.innerText !== '-0' && display.innerText !== '-0.' && display.innerText !== '0.' && display.innerText !== '0';
+        let metConditionForNumbers = (my_length < max_length && (display.innerText[0] !== '0' || display.innerText !== '-0') && (!error && !block));
+        let metConditionsForSigns = !error && display.innerText !== '-' && display.innerText !== '-0' && display.innerText !== '-0.' && display.innerText !== '0.' && display.innerText !== '0';
         let metConditionsForDot = my_length < max_length && display.innerText !== '' && !dotTyped && !error && !block && display.innerText !== '-';
-        let metConditionForZero = my_length < max_length && (display.innerText[0] !== '0' && !display.innerText.startsWith('-0') || display.innerText.startsWith('0.') || display.innerText.startsWith('-0.') && !error && !block);
+        let metConditionForZero = (my_length < max_length && (display.innerText[0] !== '0' && !display.innerText.startsWith('-0') || display.innerText.startsWith('0.') || display.innerText.startsWith('-0.')) && !error && !block);
 
         switch (e.target.innerText) {
             case '.':
@@ -115,12 +115,12 @@ buttons.map(button => {
                 }
                 break;
             case '=':
-                if (!block && !error) {
+                if (!error && !block) {
                     switch (sign) {
                         case '-':
                             value2 = parseFloat(display.innerText);
-                            result = (value1 - value2).toString();
-                            if (result.endsWith('.0')) {
+                            result = (value1 - value2);
+                            if (Number.isInteger(result)) {
                                 result = Math.round(result);
                             }
                             else {
@@ -128,16 +128,19 @@ buttons.map(button => {
                             }
                             display.innerText = result.toString();
                             block = true;
+                            value1 = result;
                             break;
                         case '+':
                             value2 = parseFloat(display.innerText);
-                            result = (value1 + value2).toString();
-                            numberTooBig();
+                            result = (value1 + value2);
+                            numberTooBig(result);
+                            value1 = result;
                             break;
                         case '*':
                             value2 = parseFloat(display.innerText);
-                            result = (value1 * value2).toString();
-                            numberTooBig();
+                            result = (value1 * value2);
+                            numberTooBig(result);
+                            value1 = result;
                             break;
                         case '/':
                             value2 = parseFloat(display.innerText);
@@ -147,8 +150,8 @@ buttons.map(button => {
                                 block = true;
                             } else {
                                 value2 = parseFloat(display.innerText);
-                                result = (value1 / value2).toString();
-                                if (result.endsWith('.0')) {
+                                result = (value1 / value2);
+                                if (Number.isInteger(result)) {
                                     result = Math.round(result);
                                 }
                                 else {
@@ -156,6 +159,7 @@ buttons.map(button => {
                                 }
                                 display.innerText = result.toString();
                                 block = true;
+                                value1 = result;
                             }
                             break;
                         default: console.log('some error has occurred');
@@ -167,15 +171,15 @@ buttons.map(button => {
                     display.innerText = display.innerText.slice(0, -1);
                 }
                 break;
-            default: display.innerText = "some error occurred";
+            default: console.log("some error occurred");
         }
 
     });
 });
 
-function numberTooBig () {
+function numberTooBig (result) {
     if (result < max_number) {
-        if (result.endsWith('.0')) {
+        if (Number.isInteger(result)) {
             result = Math.round(result);
         }
         else {

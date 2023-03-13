@@ -8,6 +8,7 @@
     FileName: calculator.js
 
 */
+
 let value1 = 0.0;
 let value2 = 0.0;
 let result = 0.0;
@@ -17,15 +18,12 @@ let minusTyped = false;
 let block = false;
 let sign = "";
 let error = false;
-
 let max_number = 999999999999999;
 let display = document.getElementById('display');
-
 let buttons = Array.from(document.getElementsByClassName('button'));
 
 buttons.map(button => {
     button.addEventListener('click', (e) => {
-
         let max_length = 15;
         let my_length = display.innerText.length;
         let metConditionForNumbers = (my_length < max_length && (display.innerText[0] !== '0' || display.innerText !== '-0') && (!error && !block));
@@ -173,7 +171,6 @@ buttons.map(button => {
                 break;
             default: console.log("some error occurred");
         }
-
     });
 });
 
